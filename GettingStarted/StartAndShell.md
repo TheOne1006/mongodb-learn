@@ -73,8 +73,74 @@ foo.baz
 
 #### 创建
 
+insert 函数可将一个文档添加到集合中.
 
+例如:  
+```
+#  mongo version: 3.2.8
+> person = { "firstName": "king", "secondName":"theone", "date":new Date()};
+{
+	"firstName" : "king",
+	"secondName" : "theone",
+	"date" : ISODate("2016-07-23T04:25:59.125Z")
+}
+# 在 当前数据库的 company 集合中插入 person
+> db.company.insert(person);
+WriteResult({ "nInserted" : 1 })
+# 查询当前数据 company 结合中的数据
+> db.company.find();
+{
+    "_id" : ObjectId("5792f23d6cca423c020b693a"),
+    "firstName" : "king",
+    "secondName" : "theone",
+    "date" : ISODate("2016-07-23T04:25:59.125Z")
+}
 
+```
 
+#### 读取
 
-- - -
+find() 和 findOne() 方法可以用于查询集合里的文档, 若只查看一个文档可用 findOne():
+
+```js
+> db.company.findOne();
+{
+	"_id" : ObjectId("5792f23d6cca423c020b693a"),
+	"firstName" : "king",
+	"secondName" : "theone",
+	"date" : ISODate("2016-07-23T04:25:59.125Z")
+}
+```
+find 和 findOne 可以接受一个 _查询文档_ 作为限定条件.
+这样就可以查询符合一定的条件的文档.  
+
+> 注意 shell 中的 find, 最多显示最多20个匹配的文档
+
+#### 更新
+
+使用 update 更新数据, update __至少__ 接收两个参数:  
+
+- 第一个是限定条件(用于匹配待更新文档)
+- 第二个是新文档,假设我们我们要为先前写的文章增加评论功能, 就需要增加一个新的键,用于保存/更新.
+
+例如:  
+```js
+// person 为之前代码使用的变量
+> person.age = 18;
+18
+> db.company.update({firstName: "king"}, person);
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.company.findOne();
+{
+	"_id" : ObjectId("5792f23d6cca423c020b693a"),
+	"firstName" : "king",
+	"secondName" : "theone",
+	"date" : ISODate("2016-07-23T11:04:20.601Z"),
+	"age" : 18
+}
+```
+
+#### 删除
+
+使用 remove 方法将文档从数据库中永久删除,   
+如果没有任何参数,它会将集合内的所有文档全部删除, 它可以接受一个座位限定条件的文档作为参数.
