@@ -10,6 +10,7 @@
     - MongoDB 的一个实例可以拥有多个相互独立的数据库,每个数据库拥有自己的集合.
 - 启动 Mongodb
 - Shell
+- Data Types 数据类型
 - `_Id` 键
     - 文档唯一值
 - `JavaScript Shell`
