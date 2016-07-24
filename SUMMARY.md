@@ -7,4 +7,6 @@
     * [Databases 数据库](/GettingStarted/Databases.md)
     * [启动 Mongodb 以及 Shell](/GettingStarted/StartAndShell.md)
     * [Data Types 数据结构](/GettingStarted/DataTypes.md)
-    * [Using the MongoDB Shell 使用 MongoDb Shell](/GettingStarted/MongodbShell.md)
+    * [使用 MongoDb Shell](/GettingStarted/MongodbShell.md)
+* [文档的创建,更新,删除](/DocumentCUD/OverView.md)
+    * [插入并保存文档](/DocumentCUD/InsertingAndSaving.md)
