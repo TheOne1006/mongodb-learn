@@ -227,7 +227,154 @@ WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
 
 ```
 
+##### 数组修改器 ??
+
+数组是常用且非常有用的数据结构:  
+
+- 它不仅是可通过索引进行引用的列表
+- 还可以作为数据集( set ) 来用
+
+##### 添加元素 `$push`
+
+如果数组存在, `$push` 向已有的数组末尾加入一个元素, 没有则创建一个新的数组.  
+
+- 配合 `$each` 子操作符,可以通过一次 `$push` 添加多个值.  
+- 配合 `$slice` 限制数组只包含最后10个元素. `$slice` 的值必须是 __负整数__
+    - 用于 `$push` 时,必须 使用 `$each` 配合
+- 配合 `$sort` 可以对数组所有对象进行排序
+    - 用于 `$push` 时,必须 使用 `$each` 配合
 
 
+
+案例1:  
+
+```js
+// 初始化
+> db.blog.post.insert({"title":"blog post", "content":"content"});
+WriteResult({ "nInserted" : 1 })
+> db.blog.post.find();
+{ "_id" : ObjectId("579636da298bd870559eed57"), "title" : "blog post", "content" : "content" }
+
+// 创建一个 comments 字段, 并创建一条评论, comments 是一组数组
+> db.blog.post.update({"_id":ObjectId("579636da298bd870559eed57")}, {"$push": {
+    comments: {"content":"nice","name":"joe"}
+}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.blog.post.findOne();
+{
+	"_id" : ObjectId("579636da298bd870559eed57"),
+	"title" : "blog post",
+	"content" : "content",
+	"comments" : [
+		{
+			"content" : "nice",
+			"name" : "joe"
+		}
+	]
+}
+
+// 再添加一个评论
+> db.blog.post.update({"_id":ObjectId("579636da298bd870559eed57")}, {"$push": {
+    comments: {"content":"very good","name":"make"}
+}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.blog.post.findOne();
+{
+	"_id" : ObjectId("579636da298bd870559eed57"),
+	"title" : "blog post",
+	"content" : "content",
+	"comments" : [
+		{
+			"content" : "nice",
+			"name" : "joe"
+		},
+		{
+			"content" : "very good",
+			"name" : "make"
+		}
+	]
+}
+
+// 一次添加多个评论
+> var comments = [{"content":"hello","name":"lilei"},{"content":"world","name":"hanmeimei"}];
+> db.blog.post.update({"_id":ObjectId("579636da298bd870559eed57")}, {"$push": {
+    comments: {"$each": comments}
+}});
+
+> db.blog.post.findOne();
+{
+	"_id" : ObjectId("579636da298bd870559eed57"),
+	"title" : "blog post",
+	"content" : "content",
+	"comments" : [
+		{
+			"content" : "nice",
+			"name" : "joe"
+		},
+		{
+			"content" : "very good",
+			"name" : "make"
+		},
+		{
+			"content" : "hello",
+			"name" : "lilei"
+		},
+		{
+			"content" : "world",
+			"name" : "hanmeimei"
+		}
+	]
+}
+```
+
+
+案例2:  
+```js
+// 初始化
+>  db.bar.insert({"foo":['a','b','c','d','e','f','g']});
+WriteResult({ "nInserted" : 1 })
+> db.bar.findOne();
+{
+	"_id" : ObjectId("57963afa298bd870559eed58"),
+	"foo" : [
+		"a",
+		"b",
+		"c",
+		"d",
+		"e",
+		"f",
+		"g"
+	]
+}
+// 测试$slice 保留最后5位
+> db.bar.update({"_id" : ObjectId("57963afa298bd870559eed58")},
+    {"$push": {"foo": {
+        "$each": ["h","l","i"],
+        "$slice": -5
+    }}}
+);
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.bar.findOne();
+{
+	"_id" : ObjectId("57963afa298bd870559eed58"),
+	"foo" : [
+		"f",
+		"g",
+		"h",
+		"l",
+		"i"
+	]
+}
+
+// 测试排序
+> db.bar.update({"_id" : ObjectId("57963afa298bd870559eed58")},
+    {"$push": {"foo": {
+        "$each": ["x","z","y"],
+        "$slice": -3,
+        "$sort": 1
+    }}}
+);
+
+```
 
 - - -
