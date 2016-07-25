@@ -10,3 +10,5 @@
     * [使用 MongoDb Shell](/GettingStarted/MongodbShell.md)
 * [文档的创建,更新,删除](/DocumentCUD/OverView.md)
     * [插入并保存文档](/DocumentCUD/InsertingAndSaving.md)
+    * [删除文档](/DocumentCUD/RemovingDocuments.md)
+    * [更新文档](/DocumentCUD/UpdatingDocuments.md)
