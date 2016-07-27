@@ -244,8 +244,6 @@ WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
 - 配合 `$sort` 可以对数组所有对象进行排序
     - 用于 `$push` 时,必须 使用 `$each` 配合
 
-
-
 案例1:  
 
 ```js
@@ -376,5 +374,105 @@ WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
 );
 
 ```
+
+##### 将数组当做数据集操作 `$addToSet`
+
+- `$addToSet`: 添加数组操作,能够避免重复
+
+> 其他简易案例
+
+```js
+// 使用 $addToSet 避免重复
+db.users.update({id: ObjectId("57963afa298bd870559eed58")},
+{"$addToSet":{ "email":"jie@email.com"}});
+
+// 使用 $addToSet & $each 一次添加多个
+db.users.update({id: ObjectId("57963afa298bd870559eed58")},
+{"$addToSet":{ "email": {"$each": ["jie@email.com", "jie1@email.com"]}}});
+
+```
+
+##### 删除数组元素 `$pop`,`$pull`
+
+若把元素看成队列, 可以使用 `$pop`,可以从数组的两端删除一个元素.  
+
+- `{"$pop":{"key": 1}}`: 从数组尾删除一个元素
+- `{"$pop":{"key": -1}}`: 从数组头部删除一个元素
+
+使用 `$pull` 根据特定条件删除 指定元素的位置  
+
+- `{"$pull":{"todo":"remove"}}` ,从数组字段 "todo" 中删除 "remove" 元素
+
+```js
+> db.lists.insert({"todo":["dishes","laundry","dry cleaning"]});
+> db.lists.update({},{"$pull":{"todo":"laundry"}});
+> db.lists.findOne();
+{
+	"_id" : ObjectId("5798ac6ef79535cca3c4572a"),
+	"todo" : [
+		"dishes",
+		"dry cleaning"
+	]
+}
+```
+
+##### 修改器速度
+有的修改器运行比较快, 如 `$inc`,因为不需要改变文档大小.  
+而数组修改器可能会改变文档大小,就会慢一些.  
+
+原因:  
+1. 将文档插入到 MongoDB 中,依次插入文档在磁盘的位置是相邻的.
+2. 因此文档变大,原先的位置放不下,这个文档就会被移动到集合的另一个位置
+
+案例:
+```js
+db.coll.insert({"x":"a"});
+db.coll.insert({"x":"b"});
+db.coll.insert({"x":"c"});
+```
+
+### upsert
+
+```js
+// 第三个参数 表示 upsert
+update({query},{修改文档}, true);
+```
+
+upsert 是一种特殊的更新. 要是没有找到符合更新条件的文档,就会以这条件和更新文件为基础创建一个新的文档.  
+
+`$setOnInsert` 指定字段只有在创建时生效.
+
+### 更新多文档
+
+```js
+update({query},{modify}, isInsert, 多文档更新 boolean);
+```
+
+### 返回被更新的文档
+
+调用 `getLastError` 仅能获得关于更新的有限信息, 并不能返回被更新的文档.  
+可以通过 `findAndModify` 命令得到被更新的文档.  
+这对于操作队列以及执行其他需要进行原子性取值和赋值的操作来说,十分方面.  
+
+```js
+db.runCommand({
+    "findAndModify": "prcesses", // 字符串, 集合名
+    "query": {"status": "READY"}, // 查询文档
+    "sort": {"priority": -1}, // 排序结果
+    "remove": true,  // 是否删除文档
+    // "update": boolean , 与 remove 必须指定一个
+    "new": boolean, // true 返回更新后的文档, 默认 false 更新前的文档
+    "fields": {object}, // 文档中需要返回的字段
+    "upsert": boolean,
+})
+```
+
+
+
+
+
+
+
+
 
 - - -
