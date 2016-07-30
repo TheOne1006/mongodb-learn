@@ -16,4 +16,5 @@
 * [文档的查询](/DocumentQuery/OverView.md)
     * [find 简介](/DocumentQuery/IntroductionToFind.md)
     * [查询条件](/DocumentQuery/QueryCriteria.md)
-    
+    * [特定类型的查询](/DocumentQuery/Type-Specific.md)
+    * [$where 查询](/DocumentQuery/WhereQueries.md)
