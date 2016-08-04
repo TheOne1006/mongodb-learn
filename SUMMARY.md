@@ -26,4 +26,6 @@
     * [索引](/Indexing/OverView.md)
         * [索引简介](/Indexing/Introduction.md)
         * [使用explain() 和 hint()](/Indexing/explainAndhint.md)
-        
+        * [何时不应该使用索引](/Indexing/WhenNotToIndex.md)
+        * [索引类型](/Indexing/TypesofIndexes.md)
+        * [索引管理](/Indexing/IndexAdministration.md)
