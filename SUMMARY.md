@@ -29,3 +29,8 @@
         * [何时不应该使用索引](/Indexing/WhenNotToIndex.md)
         * [索引类型](/Indexing/TypesofIndexes.md)
         * [索引管理](/Indexing/IndexAdministration.md)
+    * [特殊索引和集合](/SpecialIndexAndCollection/OverView.md)
+        * [固定集合](/SpecialIndexAndCollection/CappedCollections.md)
+        * [TTL索引](/SpecialIndexAndCollection/TTLIndexes.md)
+        * [全文本索引](/SpecialIndexAndCollection/Full-TextIndexes.md)
+        * [地理空间索引](/SpecialIndexAndCollection/GeospatialIndexing.md)
