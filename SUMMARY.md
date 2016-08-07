@@ -34,3 +34,6 @@
         * [TTL索引](/SpecialIndexAndCollection/TTLIndexes.md)
         * [全文本索引](/SpecialIndexAndCollection/Full-TextIndexes.md)
         * [地理空间索引](/SpecialIndexAndCollection/GeospatialIndexing.md)
+        * [使用 GridFS 存储文件](/SpecialIndexAndCollection/GridFS.md)
+    * [聚合](/Aggregation/OverView.md)
+        * [聚合框架](/Aggregation/AggregationFramework.md)
