@@ -38,3 +38,7 @@
     * [聚合](/Aggregation/OverView.md)
         * [聚合框架](/Aggregation/AggregationFramework.md)
     * [启动和停止MongoDB](/StartAndStop/OverView.md)
+        * [命令行启动](/StartAndStop/Command.md)
+        * [停止 MongoDB](/StartAndStop/Stop.md)
+        * [安全性](/StartAndStop/Security.md)
+        * [日志](/StartAndStop/Logging.md)
