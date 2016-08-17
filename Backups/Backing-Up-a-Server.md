@@ -103,5 +103,9 @@ $ mongorestore -p 31000 --oplogReplay dump/
 
 如果转储数据库 使用 `--oplog` 参数,运行 mongorestore 时必须使用 `--oplogReplay`
 
+如果在运行的服务器上进行数据替换, 使用 `--drop` 选项,以在恢复一个集合前先删除它.  
+
+
+
 
 - - -
